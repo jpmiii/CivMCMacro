@@ -6,7 +6,7 @@ var waypoints = [
 { x: 123, z: -123, slow: 15, target: 3 },
 { x: 345, z: -345 }, // there are defaults for slow, target, and label defaults to index+1
 { x: 3, z: -4 , slow: 0, target: 15 , label: "almost there"},
-{ x: 99, z: -99 , slow: 15, target: 5 , label: "woo hoo"},
+{ x: 99, z: -99 , slow: 15, target: 5 , label: "woo hoo"}
 ];
 
 var reverse = false; //set to true to boat in reverse  order
@@ -14,7 +14,7 @@ var reverse = false; //set to true to boat in reverse  order
 const d2d = Hud.createDraw2D();
 let dismeter = null;
 d2d.setOnInit(JavaWrapper.methodToJava(() => {
-    dismeter = d2d.addText('Start Boating', 0, d2d.getHeight()-20 - 10, 0xFFFFFF, true);
+    dismeter = d2d.addText('Start Boating', 0, d2d.getHeight()-30, 0xFFFFFF, true);
 }));
 d2d.register();
 
@@ -22,7 +22,7 @@ var boating = true;
 const p = Player.getPlayer();
 const default_target = 5;
 const default_slow = 20
-var loop_count = 0;
+
 var stuck = 0;
 GlobalVars.putBoolean("stop",false);
 
@@ -79,7 +79,6 @@ function finished() {
 }
 
 while (boating) {
-    loop_count++;
     if (GlobalVars.getBoolean("stop") == true) { 
         Chat.log(`global stop: ${GlobalVars.getBoolean("stop")}`);
         KeyBind.keyBind("key.left", false);
@@ -165,9 +164,6 @@ while (boating) {
         
         const angle = signedAngleBetweenVectors(boat_direction, waypoint_direction);
 
-        // if (loop_count%10 == 0) {
-        //     Chat.log(`waypoint: ${waypoint_index+1} distance: ${Math.trunc(waypoint_distance)} `);
-        // }
         if ('label' in waypoints[waypoint_index]) {
             dismeter?.setText(`waypoint: ${waypoints[waypoint_index].label} distance: ${Math.trunc(waypoint_distance)} `)
         } else {
@@ -203,7 +199,7 @@ while (boating) {
     } else {
         stuck++;
         Chat.log(`boat stuck count: ${stuck}`);
-        if (stuck > 20) {
+        if (stuck > 10) {
             Chat.log("boat appears to be stuck, stopping script");
             KeyBind.keyBind("key.left", false);
             KeyBind.keyBind("key.right", false);
@@ -211,6 +207,7 @@ while (boating) {
             break;
         } else if (stuck > 3) {
             Chat.log("boat appears to be stuck, trying to unstick");
+            KeyBind.keyBind("key.forward", false);
             KeyBind.keyBind("key.left", true);
             KeyBind.keyBind("key.back", true);
             Client.waitTick(10);
