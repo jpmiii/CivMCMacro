@@ -1,4 +1,4 @@
-
+// Look at a double chest and run. It will swap the first 4 rows of a double chest with player inventory.
 const p = Player.getPlayer() ;
 var inv = Player.openInventory();
 const lagTick = 6; // Edit this depending on your internet connection
